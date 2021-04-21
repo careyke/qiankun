@@ -8,6 +8,10 @@ import { loadApp } from './loader';
 import { doPrefetchStrategy } from './prefetch';
 import { Deferred, getContainer, getXPathForElement, toArray } from './utils';
 
+/**
+ * 单例模式
+ * 全局维护微应用列表，每个微应用只配置一次
+ */
 let microApps: Array<RegistrableApp<Record<string, unknown>>> = [];
 
 // eslint-disable-next-line import/no-mutable-exports
@@ -134,7 +138,10 @@ export function start(opts: FrameworkConfiguration = {}) {
     }
   }
 
-  startSingleSpa({ urlRerouteOnly });
+  startSingleSpa({ urlRerouteOnly }); // singleSpa应用开始启动
 
+  /**
+   * 加载微应用静态资源的开关
+   */
   frameworkStartedDefer.resolve();
 }

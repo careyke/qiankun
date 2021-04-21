@@ -70,6 +70,9 @@ function prefetch(entry: Entry, opts?: ImportEntryOpts): void {
     return;
   }
 
+  /**
+   * 利用requestIdleCallback 在空余时间预加载微应用资源
+   */
   requestIdleCallback(async () => {
     const { getExternalScripts, getExternalStyleSheets } = await importEntry(entry, opts);
     requestIdleCallback(getExternalStyleSheets);

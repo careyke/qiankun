@@ -72,6 +72,12 @@ function createElement(
   containerElement.innerHTML = appContent;
   // appContent always wrapped with a singular div
   const appElement = containerElement.firstChild as HTMLElement;
+
+  /**
+   * CSS样式冲突的处理方式
+   * 1. shadowDOM
+   * 2. scoped CSS
+   */
   if (strictStyleIsolation) {
     if (!supportShadowDOM) {
       console.warn(
@@ -246,6 +252,13 @@ let prevAppUnmountedDeferred: Deferred<void>;
 
 export type ParcelConfigObjectGetter = (remountContainer?: string | HTMLElement) => ParcelConfigObject;
 
+/**
+ * 以 html-entry 的模式开始加载所需要的静态资源
+ * @param app 
+ * @param configuration 
+ * @param lifeCycles 
+ * @returns 
+ */
 export async function loadApp<T extends ObjectType>(
   app: LoadableApp<T>,
   configuration: FrameworkConfiguration = {},
@@ -259,6 +272,8 @@ export async function loadApp<T extends ObjectType>(
     performanceMark(markName);
   }
 
+  // 这里在 start 方法中已经给singular赋过缺省值
+  // 手动加载微应用时不会走start
   const { singular = false, sandbox = true, excludeAssetFilter, ...importEntryOpts } = configuration;
 
   // get the entry html content and script executor
@@ -271,10 +286,11 @@ export async function loadApp<T extends ObjectType>(
     await (prevAppUnmountedDeferred && prevAppUnmountedDeferred.promise);
   }
 
-  const appContent = getDefaultTplWrapper(appInstanceId, appName)(template);
+  const appContent = getDefaultTplWrapper(appInstanceId, appName)(template); // 字符串 html
 
   const strictStyleIsolation = typeof sandbox === 'object' && !!sandbox.strictStyleIsolation;
   const scopedCSS = isEnableScopedCSS(sandbox);
+  // appContent对应的DOM Element
   let initialAppWrapperElement: HTMLElement | null = createElement(
     appContent,
     strictStyleIsolation,
@@ -306,6 +322,9 @@ export async function loadApp<T extends ObjectType>(
   const useLooseSandbox = typeof sandbox === 'object' && !!sandbox.loose;
   let sandboxContainer;
   if (sandbox) {
+    /**
+     * JS沙箱
+     */
     sandboxContainer = createSandboxContainer(
       appName,
       // FIXME should use a strict sandbox logic while remount, see https://github.com/umijs/qiankun/issues/518
