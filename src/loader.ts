@@ -341,7 +341,7 @@ export async function loadApp<T extends ObjectType>(
 
   const { beforeUnmount = [], afterUnmount = [], afterMount = [], beforeMount = [], beforeLoad = [] } = mergeWith(
     {},
-    getAddOns(global, assetPublicPath),
+    getAddOns(global, assetPublicPath), // 注入子应用运行的引擎信息和子应用资源的publicPath
     lifeCycles,
     (v1, v2) => concat(v1 ?? [], v2 ?? []),
   );
@@ -349,6 +349,7 @@ export async function loadApp<T extends ObjectType>(
   await execHooksChain(toArray(beforeLoad), app, global);
 
   // get the lifecycle hooks from module exports
+  // 获取子应用生命周期函数
   const scriptExports: any = await execScripts(global, !useLooseSandbox);
   const { bootstrap, mount, unmount, update } = getLifecyclesFromExports(
     scriptExports,
@@ -412,7 +413,7 @@ export async function loadApp<T extends ObjectType>(
         mountSandbox,
         // exec the chain after rendering to keep the behavior with beforeLoad
         async () => execHooksChain(toArray(beforeMount), app, global),
-        async (props) => mount({ ...props, container: appWrapperGetter(), setGlobalState, onGlobalStateChange }),
+        async (props) => mount({ ...props, container: appWrapperGetter(), setGlobalState, onGlobalStateChange }), // 执行子应用的mount方法
         // finish loading after app mounted
         async () => render({ element: appWrapperElement, loading: false, container: remountContainer }, 'mounted'),
         async () => execHooksChain(toArray(afterMount), app, global),

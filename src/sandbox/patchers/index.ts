@@ -11,6 +11,15 @@ import patchHistoryListener from './historyListener';
 import patchInterval from './interval';
 import patchWindowListener from './windowListener';
 
+/**
+ * 各种补丁
+ * @param appName 
+ * @param elementGetter 
+ * @param sandbox 
+ * @param scopedCSS 
+ * @param excludeAssetFilter 
+ * @returns 
+ */
 export function patchAtMounting(
   appName: string,
   elementGetter: () => HTMLElement | ShadowRoot,

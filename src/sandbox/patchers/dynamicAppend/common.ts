@@ -19,6 +19,11 @@ const SCRIPT_TAG_NAME = 'SCRIPT';
 const LINK_TAG_NAME = 'LINK';
 const STYLE_TAG_NAME = 'STYLE';
 
+/**
+ * 动态添加时需要劫持的标签
+ * @param tagName 
+ * @returns 
+ */
 export function isHijackingTag(tagName?: string) {
   return (
     tagName?.toUpperCase() === LINK_TAG_NAME ||
@@ -136,6 +141,11 @@ export type ContainerConfig = {
   excludeAssetFilter?: CallableFunction;
 };
 
+/**
+ * 劫持子应用中动态添加的style link script标签
+ * @param opts 
+ * @returns 
+ */
 function getOverwrittenAppendChildOrInsertBefore(opts: {
   rawDOMAppendOrInsertBefore: <T extends Node>(newChild: T, refChild?: Node | null) => T;
   isInvokedByMicroApp: (element: HTMLElement) => boolean;

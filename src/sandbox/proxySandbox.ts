@@ -196,7 +196,7 @@ export default class ProxySandbox implements SandBox {
 
           if (variableWhiteList.indexOf(p) !== -1) {
             // @ts-ignore
-            rawWindow[p] = value;
+            rawWindow[p] = value; // 白名单中的属性需要存在在正式的window对象中
           }
 
           updatedValueSet.add(p);
