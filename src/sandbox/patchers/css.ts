@@ -32,6 +32,9 @@ export class ScopedCSS {
   private swapNode: HTMLStyleElement;
 
   constructor() {
+    /**
+     * 构建一个工具style节点，用来获取内部的rules
+     */
     const styleNode = document.createElement('style');
     rawDocumentBodyAppend.call(document.body, styleNode);
 
@@ -56,6 +59,9 @@ export class ScopedCSS {
     }
 
     const mutator = new MutationObserver((mutations) => {
+      /**
+       * 针对动态添加样式类
+       */
       for (let i = 0; i < mutations.length; i += 1) {
         const mutation = mutations[i];
 
