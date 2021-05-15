@@ -307,6 +307,7 @@ export async function loadApp<T extends ObjectType>(
   // 确保每次应用加载前容器 dom 结构已经设置完毕
   render({ element: initialAppWrapperElement, loading: true, container: initialContainer }, 'loading');
 
+  // 获取子应用包裹DOM节点
   const initialAppWrapperGetter = getAppWrapperGetter(
     appName,
     appInstanceId,
