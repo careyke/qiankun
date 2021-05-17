@@ -183,7 +183,7 @@ export default class ProxySandbox implements SandBox {
             const descriptor = Object.getOwnPropertyDescriptor(rawWindow, p);
             const { writable, configurable, enumerable } = descriptor!;
             if (writable) {
-              // rawWindow中可写的属性才复制到fakeWindow中
+              // rawWindow中独有的属性如果可以写，同样需要复制到fakeWindow中
               Object.defineProperty(target, p, {
                 configurable,
                 enumerable,
@@ -266,6 +266,7 @@ export default class ProxySandbox implements SandBox {
         }
 
         // eslint-disable-next-line no-nested-ternary
+        // 这里propertiesWithGetter中属性从rawWindow中获取感觉有点问题吧？？？
         const value = propertiesWithGetter.has(p)
           ? (rawWindow as any)[p]
           : p in target
