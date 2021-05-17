@@ -12,7 +12,7 @@ import patchInterval from './interval';
 import patchWindowListener from './windowListener';
 
 /**
- * 各种补丁
+ * 各种补丁 bootstrap阶段和mount节点添加的补丁
  * @param appName 
  * @param elementGetter 
  * @param sandbox 

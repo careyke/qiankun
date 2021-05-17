@@ -40,6 +40,8 @@ function patchDocumentCreateElement() {
     };
   }
 
+  // 返回一个函数
+  // 用来还原配置，qiankun内部有很多这种类似的方法
   return function unpatch() {
     Document.prototype.createElement = rawDocumentCreateElement;
   };
@@ -70,10 +72,13 @@ export function patchStrictSandbox(
     proxyAttachContainerConfigMap.set(proxy, containerConfig);
   }
   // all dynamic style sheets are stored in proxy container
+  // 动态添加的style rules ，都会被缓存起来
   const { dynamicStyleSheetElements } = containerConfig;
 
+  // 代理document.create方法
   const unpatchDocumentCreate = patchDocumentCreateElement();
 
+  // 代理动态插入DOM元素的方法
   const unpatchDynamicAppendPrototypeFunctions = patchHTMLDynamicAppendPrototypeFunctions(
     (element) => elementAttachContainerConfigMap.has(element),
     (element) => elementAttachContainerConfigMap.get(element)!,

@@ -69,6 +69,7 @@ function createFakeWindow(global: Window) {
 
   /*
    copy the non-configurable property of global to fakeWindow
+   window中无法配置的属性copy一份存在fakeWindow对象中
    see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy/handler/getOwnPropertyDescriptor
    > A property cannot be reported as non-configurable, if it does not exists as an own property of the target object or if it exists as a configurable own property of the target object.
    */
@@ -182,6 +183,7 @@ export default class ProxySandbox implements SandBox {
             const descriptor = Object.getOwnPropertyDescriptor(rawWindow, p);
             const { writable, configurable, enumerable } = descriptor!;
             if (writable) {
+              // rawWindow中可写的属性才复制到fakeWindow中
               Object.defineProperty(target, p, {
                 configurable,
                 enumerable,
@@ -215,6 +217,7 @@ export default class ProxySandbox implements SandBox {
       },
 
       get(target: FakeWindow, p: PropertyKey): any {
+        // 一些特殊属性的处理
         if (p === Symbol.unscopables) return unscopables;
 
         // avoid who using window.window or window.self to escape the sandbox environment to touch the really window
@@ -293,6 +296,7 @@ export default class ProxySandbox implements SandBox {
           const descriptor = Object.getOwnPropertyDescriptor(rawWindow, p);
           descriptorTargetMap.set(p, 'rawWindow');
           // A property cannot be reported as non-configurable, if it does not exists as an own property of the target object
+          // 为什么(???)
           if (descriptor && !descriptor.configurable) {
             descriptor.configurable = true;
           }
