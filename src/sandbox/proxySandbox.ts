@@ -267,6 +267,9 @@ export default class ProxySandbox implements SandBox {
 
         // eslint-disable-next-line no-nested-ternary
         // 这里propertiesWithGetter中属性从rawWindow中获取感觉有点问题吧？？？
+        // 经过测试，没有问题
+        // 一个属性如果设置了getter和setter,则其值需要存在其他地方，由getter和setter开读写。
+        // 如果在当前对象上读写，会出现无限调用的情况，最终爆栈
         const value = propertiesWithGetter.has(p)
           ? (rawWindow as any)[p]
           : p in target
