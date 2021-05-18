@@ -183,7 +183,6 @@ export default class ProxySandbox implements SandBox {
             const descriptor = Object.getOwnPropertyDescriptor(rawWindow, p);
             const { writable, configurable, enumerable } = descriptor!;
             if (writable) {
-              // rawWindow中独有的属性如果可以写，同样需要复制到fakeWindow中
               Object.defineProperty(target, p, {
                 configurable,
                 enumerable,
@@ -198,7 +197,7 @@ export default class ProxySandbox implements SandBox {
 
           if (variableWhiteList.indexOf(p) !== -1) {
             // @ts-ignore
-            rawWindow[p] = value; // 白名单中的属性需要存在在正式的window对象中
+            rawWindow[p] = value; // 白名单中的属性需要存在在真实的window对象中
           }
 
           updatedValueSet.add(p);
@@ -300,7 +299,7 @@ export default class ProxySandbox implements SandBox {
           const descriptor = Object.getOwnPropertyDescriptor(rawWindow, p);
           descriptorTargetMap.set(p, 'rawWindow');
           // A property cannot be reported as non-configurable, if it does not exists as an own property of the target object
-          // 为什么(???)
+          // 为什么(???) - 代理getOwnPropertyDescriptor的规则就是这样
           if (descriptor && !descriptor.configurable) {
             descriptor.configurable = true;
           }

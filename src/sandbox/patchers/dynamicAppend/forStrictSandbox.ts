@@ -94,6 +94,7 @@ export function patchStrictSandbox(
 
     const allMicroAppUnmounted = mountingPatchCount === 0 && bootstrappingPatchCount === 0;
     // release the overwrite prototype after all the micro apps unmounted
+    // 必须所有子应用都销毁时才能卸载补丁
     if (allMicroAppUnmounted) {
       unpatchDynamicAppendPrototypeFunctions();
       unpatchDocumentCreate();
