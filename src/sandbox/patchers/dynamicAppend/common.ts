@@ -61,6 +61,7 @@ function patchCustomEvent(
   return e;
 }
 
+// 手动触发onload事件
 function manualInvokeElementOnLoad(element: HTMLLinkElement | HTMLScriptElement) {
   // we need to invoke the onload event manually to notify the event listener that the script was completed
   // here are the two typical ways of dynamic script loading
@@ -75,6 +76,7 @@ function manualInvokeElementOnLoad(element: HTMLLinkElement | HTMLScriptElement)
   }
 }
 
+// 手动触发onerror事件
 function manualInvokeElementOnError(element: HTMLLinkElement | HTMLScriptElement) {
   const errorEvent = new CustomEvent('error');
   const patchedEvent = patchCustomEvent(errorEvent, () => element);
@@ -377,6 +379,7 @@ export function rebuildCSSRules(
         const cssRules = getStyledElementCSSRules(stylesheetElement);
         if (cssRules) {
           // eslint-disable-next-line no-plusplus
+          // 这里不会导致规则重复添加吗？？？
           for (let i = 0; i < cssRules.length; i++) {
             const cssRule = cssRules[i];
             const cssStyleSheetElement = stylesheetElement.sheet as CSSStyleSheet;

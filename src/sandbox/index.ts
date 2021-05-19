@@ -44,7 +44,6 @@ export function createSandboxContainer(
   }
 
   // some side effect could be be invoked while bootstrapping, such as dynamic stylesheet injection with style-loader, especially during the development phase
-  // app 环境沙箱 需要做的操作
   const bootstrappingFreers = patchAtBootstrapping(appName, elementGetter, sandbox, scopedCSS, excludeAssetFilter);
   // mounting freers are one-off and should be re-init at every mounting time
   let mountingFreers: Freer[] = [];
