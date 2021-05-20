@@ -359,6 +359,7 @@ export async function loadApp<T extends ObjectType>(
     sandboxContainer?.instance?.latestSetProp,
   );
 
+  // 主子应用通信配置
   const {
     onGlobalStateChange,
     setGlobalState,

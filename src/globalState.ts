@@ -82,6 +82,7 @@ export function getMicroAppStateActions(id: string, isMaster?: boolean): MicroAp
       const prevGlobalState = cloneDeep(globalState);
       globalState = cloneDeep(
         Object.keys(state).reduce((_globalState, changeKey) => {
+          // 子应用只能修改state含有的属性，主应用可以添加属性
           if (isMaster || _globalState.hasOwnProperty(changeKey)) {
             changeKeys.push(changeKey);
             return Object.assign(_globalState, { [changeKey]: state[changeKey] });
