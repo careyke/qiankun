@@ -60,6 +60,7 @@ export function loadMicroApp<T extends ObjectType>(
 ): MicroApp {
   const { props, name } = app;
 
+  // 新概念，通过Xpath来定位元素的位置
   const getContainerXpath = (container: string | HTMLElement): string | void => {
     const containerElement = getContainer(container);
     if (containerElement) {
@@ -84,6 +85,7 @@ export function loadMicroApp<T extends ObjectType>(
    */
   const memorizedLoadingFn = async (): Promise<ParcelConfigObject> => {
     const userConfiguration = configuration ?? { ...frameworkConfiguration, singular: false };
+    // $$cacheLifecycleByAppName是一个过期配置项 后面会删除
     const { $$cacheLifecycleByAppName } = userConfiguration;
     const container = 'container' in app ? app.container : undefined;
 
@@ -115,6 +117,7 @@ export function loadMicroApp<T extends ObjectType>(
     return (await parcelConfigObjectGetterPromise)(container);
   };
 
+  // 这里并没有用single-spa中的挂载节点，由qiankun来提供挂载节点
   return mountRootParcel(memorizedLoadingFn, { domElement: document.createElement('div'), ...props });
 }
 
