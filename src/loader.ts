@@ -453,6 +453,7 @@ export async function loadApp<T extends ObjectType>(
     };
 
     if (typeof update === 'function') {
+      // 多实例模式下 update生命周期才会起作用 single-spa
       parcelConfig.update = update;
     }
 
