@@ -14,6 +14,7 @@ const deps: Record<string, OnGlobalStateChangeCallback> = {};
 function emitGlobal(state: Record<string, any>, prevState: Record<string, any>) {
   Object.keys(deps).forEach((id: string) => {
     if (deps[id] instanceof Function) {
+      // 确保每个应用的订阅者获取到的globalState都是不同的对象
       deps[id](cloneDeep(state), cloneDeep(prevState));
     }
   });
