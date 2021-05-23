@@ -74,6 +74,7 @@ export function loadMicroApp<T extends ObjectType>(
     return {
       ...config,
       // empty bootstrap hook which should not run twice while it calling from cached micro app
+      // 防止子应用的bootstrap周期调用多次
       bootstrap: () => Promise.resolve(),
     };
   };
@@ -110,6 +111,7 @@ export function loadMicroApp<T extends ObjectType>(
         appConfigPromiseGetterMap.set(name, parcelConfigObjectGetterPromise);
       } else {
         const xpath = getContainerXpath(container);
+        // 缓存子应用的配置上下文，不需要每次都重新生成，导致内存状态丢失
         if (xpath) appConfigPromiseGetterMap.set(`${name}-${xpath}`, parcelConfigObjectGetterPromise);
       }
     }
