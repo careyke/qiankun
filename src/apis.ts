@@ -119,7 +119,7 @@ export function loadMicroApp<T extends ObjectType>(
     return (await parcelConfigObjectGetterPromise)(container);
   };
 
-  // 这里并没有用single-spa中的挂载节点，由qiankun来提供挂载节点
+  // 这里并没有用single-spa中的挂载节点，而是使用由qiankun提供的挂载节点
   return mountRootParcel(memorizedLoadingFn, { domElement: document.createElement('div'), ...props });
 }
 
